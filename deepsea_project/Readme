@@ -1,0 +1,5 @@
+to test the project please lance Ollama with :
+Ollama serve 
+
+Then lance Django with :
+python manage.py runserver
