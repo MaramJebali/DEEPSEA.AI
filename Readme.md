@@ -50,7 +50,7 @@ Zooplankton Identification, Microalgae Detection, Coral Reef Health Classificati
 Fish Disease Detection, Fish Counting, Behavior Anomaly Detection.
 
 **Marine Surveillance**:  
-Vessel Detection from Satellite, Intruder Detection, Fish Catch Monitoring, Fish Size Estimation.
+Vessel Detection from Satellite, Intruder Detection, Fish Catch Monitoring, Fish Size Estimation, Sharks detection and Behavious monitoring
 
 **Assistive AI Systems**:  
 Marine Biodiversity Chatbot, Acoustic Noise Risk Reporting (NoiseShield AI).
@@ -60,7 +60,7 @@ Marine Biodiversity Chatbot, Acoustic Noise Risk Reporting (NoiseShield AI).
 # 🛠 Technologies
 
 - **Deep Learning**: TensorFlow, Keras, PyTorch
-- **Computer Vision**: YOLOv5, YOLOv8, Faster R-CNN, Mask R-CNN, OpenCV
+- **Computer Vision**: YOLOv5, YOLOv8, Faster R-CNN, Mask R-CNN, OpenCV,ByTrack
 - **NLP & Knowledge Systems**: Mistral LLM, LangChain, FAISS
 - **Sound Classification**: PANNs CNN14
 
