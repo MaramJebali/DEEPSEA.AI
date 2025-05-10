@@ -119,3 +119,45 @@ def zooplankton_classifier_view(request):
         'confidence': confidence,
         'uploaded_image_url': uploaded_image_url
     })
+
+# -------------------------------------------------------------------HAB Detection-----------------------------------------------------------------
+from django.shortcuts import render
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+import numpy as np
+import os
+from django.core.files.storage import FileSystemStorage
+
+# Load HAB model
+hab_model_path = os.path.join(BASE_DIR, 'models', 'model.h5')
+hab_model = load_model(hab_model_path)
+
+# Define classes
+hab_classes = ["Microalgae", "Harmful Algal Bloom"]
+
+def hab_classifier_view(request):
+    label = ""
+    confidence = 0
+    uploaded_image_url = ""
+
+    if request.method == 'POST' and request.FILES.get('image1'):
+        img = request.FILES['image1']
+        fs = FileSystemStorage(location='media/temp', base_url='/media/temp/')
+        filename = fs.save(img.name, img)
+        uploaded_image_url = fs.url(filename)
+
+        img_save_path = os.path.join(fs.location, filename)
+        img_loaded = image.load_img(img_save_path, target_size=(180, 180))
+        img_array = image.img_to_array(img_loaded)
+        img_array = np.expand_dims(img_array, axis=0) / 255.0
+
+        prediction = hab_model.predict(img_array)
+        predicted_index = np.argmax(prediction[0])
+        label = hab_classes[predicted_index]
+        confidence = round(prediction[0][predicted_index] * 100, 2)
+
+    return render(request, 'habdetection.html', {
+        'label': label,
+        'confidence': confidence,
+        'uploaded_image_url': uploaded_image_url
+    })
