@@ -15,10 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.conf import settings
+from chatbot.views import index  # 👈 Import the view
 
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('chatbot.urls')),  # 👈 Include chatbot URLs
+        path('', index, name='index'),  # ✅ This line is critical!
+
+    path('', include('chatbot.urls')),
+    path('outcomes/', include('outcomes.urls')),
+        path('auth/', include('social_django.urls', namespace='social')),  # Google login
+
+    path('users/', include('users.urls', namespace='users')),
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

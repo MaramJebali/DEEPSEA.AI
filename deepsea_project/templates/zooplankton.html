@@ -1,0 +1,241 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon .png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <!-- Header -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}#hero">Home</a></li>
+          <li><a href="#solution" class="active">Solutions</a></li>
+
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+<!-- Zooplankton Classifier Section -->
+<main class="main">
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url('{% static 'assets/img/zz.jpg' %}');">
+        <div class="container position-relative text-center">
+            <h1>Zooplankton Classification</h1>
+            <p>DeepSea.AI provides cutting-edge tools for monitoring marine biodiversity and zooplankton species.</p>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li><a href="{% url 'Marinehealth' %}">Marine Health Monitoring</a></li>
+                    <li class="current">Zooplankton Classifier</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <section class="section form-section">
+        <div class="container" data-aos="fade-up">
+            <div class="row justify-content-center gap-4">
+                <!-- Side by Side Cards -->
+                <div class="col-lg-5 col-md-6 d-flex flex-grow-1 justify-content-between">
+                    <!-- Input Section -->
+                    <div class="tool-card text-center shadow-sm p-4 mb-4 flex-grow-1" style="min-width: 300px;">
+                        <h4 class="tool-title">Upload Your Zooplankton Image</h4>
+                        <p class="tool-text">Upload a zooplankton image to analyze its species classification.</p>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <input type="file" id="image1" name="image1" accept="image/*" class="form-control" onchange="previewImage();">
+                            </div>
+                            <button type="submit" class="tool-btn">Classify </button>
+                        </form>
+                           <!-- Prediction Result -->
+          {% if label %}
+          <div class="col-lg-5 col-md-6 tool-card text-center shadow-sm p-4 mb-4">
+            <h4 class="tool-title">Prediction Result</h4>
+            <p class="tool-text"><strong>Species:</strong> <span class="badge bg-primary">{{ label }}</span></p>
+            <p class="tool-text"><strong>Confidence:</strong> {{ confidence }}%</p>
+          </div>
+          
+          {% endif %}
+        </div>
+
+                        
+                    </div>
+<div class="tool-card text-center shadow-sm p-4 mb-4 flex-grow-1" style="min-width: 300px;" id="image-section">
+    <div class="image-preview-container d-flex justify-content-center align-items-center" id="image-container" style="border: 2px dashed #ccc; height: 400px; position: relative;">
+        {% if uploaded_image_url %}
+            <img id="preview" class="preview-img img-fluid rounded shadow mt-3" src="{{ uploaded_image_url }}" alt="Analyzed Zooplankton Image">
+        {% else %}
+            <span id="image-placeholder" class="text-muted" style="position: absolute;">No image uploaded yet</span>
+            <img id="preview" class="preview-img img-fluid rounded shadow mt-3" style="display: none;">
+        {% endif %}
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- JavaScript to handle image preview -->
+<script>
+    function previewImage() {
+        const file = document.getElementById('image1').files[0];
+        const preview = document.getElementById('preview');
+        const placeholder = document.getElementById('image-placeholder');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
+    }
+</script>
+
+
+
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <strong class="px-1 sitename">DeepSea.AI</strong> All Rights Reserved</p>
+      <div class="credits">
+        Designed by <a href="https://maramjebali7111.wixsite.com/samsan/">Samsan</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+ 
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+
+</html>
+<style>/* Tool Card Styling */
+.tool-card {
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  width: 100%; /* Ensure both cards take equal width */
+  min-width: 300px;
+  margin: 10px; /* Add some space between the cards */
+
+
+}
+
+.tool-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #004d40;
+  margin: 0.8rem 0;
+}
+
+.tool-text {
+  font-size: 1rem;
+  color: #00695c;
+  margin-bottom: 1rem;
+}
+
+.tool-btn {
+  background: linear-gradient(135deg, #004d40, #00796b);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.tool-btn:hover {
+  background: linear-gradient(155deg, #00796b, #004d40);
+}
+
+.preview-img {
+  max-height: 300px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.spinner-border {
+  margin: 1em 0;
+}
+
+
+.row {
+  gap: 2rem;  /* Space between the cards */
+}
+
+</style>

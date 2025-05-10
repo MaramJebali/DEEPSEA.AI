@@ -36,45 +36,55 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
       <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
         <h1 class="sitename">DeepSea.AI</h1>
       </a>
+     
 
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="#hero" class="active">Home</a></li>
           <li><a href="#services">Solutions</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#clients">Partners</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="cta-btn" href="#services">Get Started</a>
+      {% if user.is_authenticated %}
+      <a href="{% url 'users:logout' %}"class="cta-btn" style="animation: bubble-flow 2s infinite;">Log Out</a>
+          
+      {% else %}
+        <a href="{% url 'users:getstarted' %}" class="cta-btn" style="animation: bubble-flow 2s infinite;">
+          Get Started
+        </a>
+      {% endif %}
+
     </div>
   </header>
 
   <main class="main">
 
     <!-- Hero Section -->
-    <section id="hero" class="hero section dark-background">
+       <section id="hero" class="hero section dark-background">
       <div id="heroBackground" class="hero-background"></div>
       <div id="nextHeroBackground" class="hero-background next"></div>
 
       <div class="container d-flex flex-column align-items-center">
         <h2 data-aos="fade-up" data-aos-delay="100">Preserving Marine Life Through Deep Learning</h2>
-        <p data-aos="fade-up" data-aos-delay="200">
-          DeepSea.AI leverages artificial intelligence to protect marine biodiversity, monitor ecosystems, and detect pollution for a sustainable future.
-        </p>
+        <p data-aos="fade-up" data-aos-delay="200">DeepSea.AI leverages artificial intelligence to protect marine biodiversity, monitor ecosystems, and detect pollution for a sustainable future.</p>
+
         <div class="d-flex gap-3 mt-4" data-aos="fade-up" data-aos-delay="300">
-          <a href="{% url 'chatbot' %}" class="btn-chatbot d-flex align-items-center justify-content-center">
+          <a 
+            href="{% if user.is_authenticated %}{% url 'chatbot' %}{% else %}{% url 'users:getstarted' %}{% endif %}" 
+            class="btn-chatbot d-flex align-items-center justify-content-center">
             <i class="bi bi-robot me-2"></i> Talk to Our Marine Bot
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services section">
+   <section id="services" class="services section">
       <div class="container section-title" data-aos="fade-up">
         <h2>Our Solutions</h2>
         <p>Empowering marine conservation, sustainable fisheries, and smart aquaculture through intelligent AI tools.</p>
@@ -82,49 +92,45 @@
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-5">
-          <!-- Service Items -->
+          <!-- Aquaculture -->
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
             <div class="service-item">
-              <div class="img">
-                <img src="{% static 'assets/img/tunisie-peche-aquaculture.jpg' %}" class="img-fluid" alt="">
-              </div>
+              <div class="img"><img src="{% static 'assets/img/tunisie-peche-aquaculture.jpg' %}" class="img-fluid"></div>
               <div class="details position-relative">
                 <div class="icon"><i class="bi bi-diagram-3"></i></div>
-                <a href="#" class="stretched-link"><h3>Smart Aquaculture Management</h3></a>
-                <p>Enhance aquaculture operations with AI-powered fish tracking, behavior monitoring, health diagnostics, and farm security solutions.</p>
+                <a href="{% if user.is_authenticated %}{% url 'aqua' %}{% else %}{% url 'users:getstarted' %}{% endif %}" class="stretched-link"><h3>Smart Aquaculture Management</h3></a>
+                <p>Enhance aquaculture operations with AI-powered fish tracking and diagnostics.</p>
               </div>
             </div>
           </div>
 
+          <!-- Marine Health -->
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
             <div class="service-item">
-              <div class="img">
-                <img src="{% static 'assets/img/health.jpg' %}" class="img-fluid" alt="">
-              </div>
+              <div class="img"><img src="{% static 'assets/img/health.jpg' %}" class="img-fluid"></div>
               <div class="details position-relative">
                 <div class="icon"><i class="bi bi-activity"></i></div>
-                <a href="#" class="stretched-link"><h3>Marine Ecosystem Health Monitoring</h3></a>
-                <p>Safeguard marine biodiversity with real-time coral reef monitoring, harmful algal bloom detection, underwater noise analysis, and biodiversity diagnostics.</p>
+                <a href="{% if user.is_authenticated %}{% url 'Marinehealth' %}{% else %}{% url 'users:getstarted' %}{% endif %}" class="stretched-link"><h3>Marine Ecosystem Health Monitoring</h3></a>
+                <p>Safeguard biodiversity with coral reef monitoring and pollution analysis.</p>
               </div>
             </div>
           </div>
 
+          <!-- Overfishing -->
           <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
             <div class="service-item">
-              <div class="img">
-                <img src="{% static 'assets/img/Over-fishing.webp' %}" class="img-fluid" alt="">
-              </div>
+              <div class="img"><img src="{% static 'assets/img/Over-fishing.webp' %}" class="img-fluid"></div>
               <div class="details position-relative">
                 <div class="icon"><i class="bi bi-eye"></i></div>
-                <a href="#" class="stretched-link"><h3>Sustainable Fisheries Surveillance</h3></a>
-                <p>Monitor fishing activities, detect illegal vessels, and track onboard fish catches with AI-powered satellite and video surveillance technologies.</p>
+                <a href="{% if user.is_authenticated %}{% url 'overfish' %}{% else %}{% url 'users:getstarted' %}{% endif %}" class="stretched-link"><h3>Sustainable Fisheries Surveillance</h3></a>
+                <p>Monitor fishing activities, detect illegal vessels and protect marine resources.</p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
-
     <!-- About Section -->
     <section id="about" class="about-modern">
       <div class="about-layers">
@@ -143,18 +149,7 @@
       </div>
     </section>
 
-    <!-- Clients Section -->
-    <section id="clients" class="clients section light-background">
-      <div class="container" data-aos="fade-up">
-        <div class="row gy-4">
-          {% for i in '123456' %}
-          <div class="col-xl-2 col-md-3 col-6 client-logo">
-            <img src="{% static 'assets/img/clients/client-'|add:i|stringformat:'s'|add:'.png' %}" class="img-fluid" alt="">
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
+   
 
   </main>
 

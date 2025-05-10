@@ -143,19 +143,23 @@
 
 <body class="index-page">
 
-<header id="header" class="header d-flex align-items-center fixed-top">
-  <div class="container-fluid container-xl d-flex align-items-center">
-    <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
-      <h1 class="sitename">DeepSea.AI</h1>
-    </a>
+ <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
 
     <nav id="navmenu" class="navmenu">
       <ul></ul>
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
 
-    <a class="cta-btn" href="#services">Sign Up</a>
-  </div>
+      </div>
 </header>
 
 <main class="main">
@@ -193,61 +197,70 @@
 <script src="{% static 'assets/js/main.js' %}"></script>
 
 <!-- Chatbot behavior -->
+
 <script>
-const chatForm = document.getElementById('chat-form');
-const chatMessages = document.getElementById('chat-messages');
-const userInput = document.getElementById('user-input');
-
-chatForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const userText = userInput.value.trim();
-  if (!userText) return;
-
-  const userMsg = document.createElement('div');
-  userMsg.classList.add('message', 'user');
-  userMsg.textContent = userText;
-  chatMessages.appendChild(userMsg);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-
-  userInput.value = '';
-
-  // CSRF token extraction
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-  const csrfToken = getCookie('csrftoken');
-
-  fetch("{% url 'get_bot_response' %}", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'X-CSRFToken': csrfToken
-    },
-    body: new URLSearchParams({
-      'message': userText
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    const botMsg = document.createElement('div');
-    botMsg.classList.add('message', 'bot');
-    botMsg.textContent = data.response;
-    chatMessages.appendChild(botMsg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+  const chatForm = document.getElementById('chat-form');
+  const chatMessages = document.getElementById('chat-messages');
+  const userInput = document.getElementById('user-input');
+  
+  chatForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const userText = userInput.value.trim();
+      if (!userText) return;
+  
+      // Show user message
+      const userMsg = document.createElement('div');
+      userMsg.classList.add('message', 'user');
+      userMsg.textContent = userText;
+      chatMessages.appendChild(userMsg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+      userInput.value = '';
+  
+      // Create thinking bubble
+      const thinkingMsg = document.createElement('div');
+      thinkingMsg.classList.add('message', 'bot');
+      thinkingMsg.textContent = "Thinking";
+      chatMessages.appendChild(thinkingMsg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+      // Animate dots "Thinking."
+      let dotCount = 0;
+      const thinkingInterval = setInterval(() => {
+          dotCount = (dotCount + 1) % 4; // 0 -> 1 -> 2 -> 3 -> 0
+          thinkingMsg.textContent = "Thinking" + ".".repeat(dotCount);
+      }, 500);
+  
+      // Fetch real response
+      fetch("{% url 'get_bot_response' %}", {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: new URLSearchParams({
+              'message': userText
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          clearInterval(thinkingInterval); // Stop the dots animation
+          chatMessages.removeChild(thinkingMsg); // Remove thinking message
+  
+          // Show real bot response
+          const botMsg = document.createElement('div');
+          botMsg.classList.add('message', 'bot');
+          botMsg.textContent = data.response;
+          chatMessages.appendChild(botMsg);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          clearInterval(thinkingInterval);
+          thinkingMsg.textContent = "❌ Error retrieving response.";
+      });
   });
-});
-</script>
-
+  </script>
+  
 </body>
 </html>

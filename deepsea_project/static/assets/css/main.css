@@ -4,6 +4,17 @@
   --nav-font: "Inter", sans-serif;
 }
 
+.logo-img {
+  height: 150px; /* Adjust the height as needed */
+  width: auto;
+  margin-right: 8px; /* Space between the logo and the site name */
+}
+
+.sitename {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #004d40;
+}
 
 /* Global Colors */
 :root { 
