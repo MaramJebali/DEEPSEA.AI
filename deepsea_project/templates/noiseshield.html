@@ -1,0 +1,476 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}#hero">Home</a></li>
+          <li><a href="#solution" class="active">Solutions</a></li>
+
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+<!-- Zooplankton Classifier Section -->
+<main class="main">
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url('{% static 'assets/img/s.png' %}');">
+        <div class="container position-relative text-center">
+            <h1>Noise Shield AI</h1>
+            <p>Noise Shield AI leverages advanced acoustic analysis to detect and classify marine noise pollution. It helps researchers and environmental authorities assess the impact of underwater noise on marine biodiversity, supporting sustainable ocean management.</p>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li><a href="{% url 'overfish' %}">Marine Surveillence</a></li>
+                    <li class="current">Noise Shield IA </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+<!-- NoiseShield AI Section -->
+<!-- NoiseShield AI Section -->
+<section class="section form-section">
+    <div class="container" data-aos="fade-up">
+        <div class="row justify-content-center gap-4">
+            <!-- Input Section -->
+            <div class="col-lg-5 col-md-6 d-flex flex-column justify-content-center">
+                <div class="tool-card text-center shadow-sm p-4 mb-4">
+                    <h4 class="tool-title">Upload Your Marine Noise File</h4>
+                    <p class="tool-text">Upload an audio file to analyze marine noise classification.</p>
+                    <form id="noiseForm" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- File Upload -->
+                        <div class="mb-3 input-group">
+                            <span class="input-group-text"><i class="bi bi-file-earmark-music"></i></span>
+                            <input type="file" id="audio" name="audio" accept=".wav" class="form-control" required>
+                        </div>
+
+                        <!-- Date Picker -->
+                        <div class="mb-3 input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                            <input type="date" id="datepicker" name="date" class="form-control" placeholder="Choose date" required>
+                        </div>
+
+                        <!-- Location Picker -->
+                        <div class="mb-3 input-group">
+                            <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                            <input type="text" id="location" name="location" class="form-control" placeholder="Click on map" readonly>
+                        </div>
+                        <div id="map" class="map-container mb-3"></div>
+
+                        <!-- Species Input -->
+                        <div class="mb-3 input-group">
+                            <span class="input-group-text"><i class="bi bi-list-ul"></i></span>
+                            <input type="text" id="species" name="species" class="form-control" placeholder="Species1, Species2">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="tool-btn btn btn-success mt-2"><i class="bi bi-cloud-upload"></i> Analyze</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+<div class="col-lg-5 col-md-6 d-flex flex-column justify-content-center">
+    <div class="tool-card text-center shadow-sm p-4 mb-4" id="output-section">
+        <h4 class="tool-title"><i class="bi bi-file-earmark-text"></i> Analysis Report</h4>
+        <div id="loading" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Generating the report, please wait...</p>
+        </div>
+
+        <!-- Report Display -->
+        <div id="report" style="display: none;">
+            <div class="report-content">
+                <p class="report-heading"><strong>Tags:</strong></p>
+                <ul id="tags-list" class="list-group mb-3"></ul>
+
+                <p class="report-heading"><strong>Report Summary:</strong></p>
+                <div id="report-summary" class="report-text"></div>
+
+                <!-- Toggle Details -->
+                <button class="btn btn-outline-info mt-3" data-bs-toggle="collapse" data-bs-target="#details" aria-expanded="false" aria-controls="details">
+                    <i class="bi bi-chevron-down"></i> View Full Report
+                </button>
+                <div class="collapse mt-2" id="details">
+                    <pre id="full-report" class="report-text"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- External Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+<style>
+    .map-container {
+        height: 300px;
+        width: 100%;
+        border-radius: 0.5rem;
+        margin-top: 5px;
+    }
+    .input-group-text {
+        background-color: #00796b;
+        color: white;
+    }
+    .btn-success {
+        background-color: #00796b;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+    .btn-success:hover {
+        background-color: #004d40;
+    }
+</style>
+
+
+<!-- External Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/pikaday.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/css/pikaday.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+
+<style>
+    .map-container {
+        height: 300px;
+        border-radius: 0.5rem;
+        margin-top: 10px;
+    }
+    #output-section {
+        background: #f4f4f4;
+        min-height: 300px;
+        border-radius: 0.5rem;
+        margin-top: 10px;
+    }
+    .report-text {
+        white-space: pre-wrap;
+        text-align: left;
+        margin-top: 15px;
+    }
+    .spinner-border {
+        margin: 1em 0;
+    }
+</style>
+
+
+<!-- External Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/pikaday.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/css/pikaday.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+
+<style>
+    #map {
+        height: 300px;
+        border-radius: 0.5rem;
+        margin-top: 10px;
+    }
+    .leaflet-container {
+        border-radius: 0.5rem;
+    }
+    .tool-card {
+        background: #ffffff;
+        border: 2px solid #e0e0e0;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin: 1rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+</main>
+
+
+
+
+
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <strong class="px-1 sitename">DeepSea.AI</strong> All Rights Reserved</p>
+      <div class="credits">
+        Designed by <a href="https://maramjebali7111.wixsite.com/samsan/">Samsan</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+ 
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+
+</html>
+<style>/* Tool Card Styling */
+.tool-card {
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  width: 100%; /* Ensure both cards take equal width */
+  min-width: 300px;
+  margin: 10px; /* Add some space between the cards */
+
+
+}
+
+.tool-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #004d40;
+  margin: 0.8rem 0;
+}
+
+.tool-text {
+  font-size: 1rem;
+  color: #00695c;
+  margin-bottom: 1rem;
+}
+
+.tool-btn {
+  background: linear-gradient(135deg, #004d40, #00796b);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.tool-btn:hover {
+  background: linear-gradient(155deg, #00796b, #004d40);
+}
+
+.preview-img {
+  max-height: 300px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.spinner-border {
+  margin: 1em 0;
+}
+
+
+.row {
+  gap: 2rem;  /* Space between the cards */
+}
+
+</style>
+<style>
+    .tool-card {
+        background: #ffffff;
+        border: 2px solid #e0e0e0;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        min-width: 300px;
+    }
+
+    .tool-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #004d40;
+        margin-bottom: 1rem;
+    }
+
+    .tool-subtitle {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #00796b;
+        margin: 0.5rem 0;
+    }
+
+    .report-heading {
+        font-weight: bold;
+        margin-top: 1rem;
+        color: #00695c;
+    }
+
+    .report-text {
+        white-space: pre-wrap;
+        text-align: left;
+        font-size: 0.95rem;
+        background: #f4f4f4;
+        padding: 0.8rem;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+        overflow-x: auto;
+    }
+
+    .list-group-item {
+        font-size: 1rem;
+        color: #004d40;
+    }
+
+    .btn-outline-info {
+        color: #00796b;
+        border-color: #00796b;
+        margin-top: 10px;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #00796b;
+        color: #fff;
+    }
+
+    .collapse {
+        transition: height 0.35s ease;
+    }
+</style>
+
+
+<script>
+  function displayReport(result) {
+    const reportSummary = document.getElementById('report-summary');
+    const fullReport = document.getElementById('full-report');
+
+    // Clear previous content
+    reportSummary.innerHTML = '';
+    fullReport.innerHTML = '';
+
+    try {
+        // Log the entire result for debugging
+        console.log("Full Response:", result);
+
+        // Check if the response has a report summary
+        if (result && result.report) {
+            // Display only the report summary
+            reportSummary.innerHTML = `<pre class="report-text">${result.report}</pre>`;
+        } else if (result && result.message) {
+            // Handle case where the response contains an error message
+            reportSummary.innerHTML = `<p class="text-warning">${result.message}</p>`;
+        } else {
+            reportSummary.innerHTML = '<p class="text-muted">No report generated or data missing.</p>';
+        }
+    } catch (error) {
+        // Handle any unexpected errors
+        reportSummary.innerHTML = `<p class="text-danger">Error displaying report: ${error.message}</p>`;
+        console.error("Error processing report:", error);
+    }
+}
+
+    // Handle form submission
+    document.getElementById('noiseForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        document.getElementById("loading").style.display = 'block';
+        document.getElementById("report").style.display = 'none';
+
+        try {
+            const response = await fetch("{% url 'noise_analysis' %}", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            document.getElementById("loading").style.display = 'none';
+            document.getElementById("report").style.display = 'block';
+            displayReport(result);
+        } catch (error) {
+            document.getElementById("loading").style.display = 'none';
+            document.getElementById("report").style.display = 'block';
+            document.getElementById("report-summary").innerHTML = `<p class="text-danger">Error generating report: ${error.message}</p>`;
+            console.error("Error fetching report:", error);
+        }
+    });
+
+    // Ensure map initialization after page load
+    document.addEventListener("DOMContentLoaded", function () {
+        var map = L.map('map').setView([36.8065, 10.1815], 7); // Tunis, Tunisia
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker;
+        map.on('click', function (e) {
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker(e.latlng).addTo(map);
+            document.getElementById('location').value = e.latlng.lat.toFixed(6) + ', ' + e.latlng.lng.toFixed(6);
+        });
+    });
+</script>

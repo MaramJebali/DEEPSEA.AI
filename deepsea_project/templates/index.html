@@ -1,0 +1,268 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+     
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#hero" class="active">Home</a></li>
+          <li><a href="#services">Solutions</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      {% if user.is_authenticated %}
+      <a href="{% url 'users:logout' %}"class="cta-btn" style="animation: bubble-flow 2s infinite;">Log Out</a>
+          
+      {% else %}
+        <a href="{% url 'users:getstarted' %}" class="cta-btn" style="animation: bubble-flow 2s infinite;">
+          Get Started
+        </a>
+      {% endif %}
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+       <section id="hero" class="hero section dark-background">
+      <div id="heroBackground" class="hero-background"></div>
+      <div id="nextHeroBackground" class="hero-background next"></div>
+
+      <div class="container d-flex flex-column align-items-center">
+        <h2 data-aos="fade-up" data-aos-delay="100">Preserving Marine Life Through Deep Learning</h2>
+        <p data-aos="fade-up" data-aos-delay="200">DeepSea.AI leverages artificial intelligence to protect marine biodiversity, monitor ecosystems, and detect pollution for a sustainable future.</p>
+
+        <div class="d-flex gap-3 mt-4" data-aos="fade-up" data-aos-delay="300">
+          <a 
+            href="{% if user.is_authenticated %}{% url 'chatbot' %}{% else %}{% url 'users:getstarted' %}{% endif %}" 
+            class="btn-chatbot d-flex align-items-center justify-content-center">
+            <i class="bi bi-robot me-2"></i> Talk to Our Marine Bot
+          </a>
+        </div>
+      </div>
+    </section>
+
+   <section id="services" class="services section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Our Solutions</h2>
+        <p>Empowering marine conservation, sustainable fisheries, and smart aquaculture through intelligent AI tools.</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-5">
+          <!-- Aquaculture -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="service-item">
+              <div class="img"><img src="{% static 'assets/img/tunisie-peche-aquaculture.jpg' %}" class="img-fluid"></div>
+              <div class="details position-relative">
+                <div class="icon"><i class="bi bi-diagram-3"></i></div>
+                <a href="{% if user.is_authenticated %}{% url 'aqua' %}{% else %}{% url 'users:getstarted' %}{% endif %}" class="stretched-link"><h3>Smart Aquaculture Management</h3></a>
+                <p>Enhance aquaculture operations with AI-powered fish tracking and diagnostics.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Marine Health -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="service-item">
+              <div class="img"><img src="{% static 'assets/img/health.jpg' %}" class="img-fluid"></div>
+              <div class="details position-relative">
+                <div class="icon"><i class="bi bi-activity"></i></div>
+                <a href="{% if user.is_authenticated %}{% url 'Marinehealth' %}{% else %}{% url 'users:getstarted' %}{% endif %}" class="stretched-link"><h3>Marine Ecosystem Health Monitoring</h3></a>
+                <p>Safeguard biodiversity with coral reef monitoring and pollution analysis.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overfishing -->
+          <div class="col-xl-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="service-item">
+              <div class="img"><img src="{% static 'assets/img/Over-fishing.webp' %}" class="img-fluid"></div>
+              <div class="details position-relative">
+                <div class="icon"><i class="bi bi-eye"></i></div>
+                <a href="{% if user.is_authenticated %}{% url 'overfish' %}{% else %}{% url 'users:getstarted' %}{% endif %}" class="stretched-link"><h3>Sustainable Fisheries Surveillance</h3></a>
+                <p>Monitor fishing activities, detect illegal vessels and protect marine resources.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- About Section -->
+    <section id="about" class="about-modern">
+      <div class="about-layers">
+        <div class="about-bg-layer"></div>
+        <div class="about-fg-layer">
+          <h2 class="big-title" id="animated-title">The Ocean Is Calling for Help.</h2>
+          <div class="about-text">
+            <p class="scroll-fade">This isn’t a warning. It’s already happening.</p>
+            <p class="scroll-fade">Tunisia’s oceans are disappearing... They are vanishing.</p>
+            <p class="scroll-fade">Imagine a future where our children only know these wonders through photographs.</p>
+            <p class="scroll-fade">Today, it is vanishing — if we don't act now, tomorrow will be too late.</p>
+            <p class="scroll-fade highlight">DeepSea.AI was created to answer the ocean’s call.</p>
+            <p class="scroll-fade final-line">The ocean is calling.<br>Will you answer?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+   
+
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <strong class="px-1 sitename">DeepSea.AI</strong> All Rights Reserved</p>
+      <div class="credits">
+        Designed by <a href="https://maramjebali7111.wixsite.com/samsan/">Samsan</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+
+<script>
+  const backgrounds = [
+    "{% static 'assets/img/Img1 (1).jpg' %}",
+    "{% static 'assets/img/Img1 (2).jpg' %}",
+    "{% static 'assets/img/Img1 (3).jpg' %}",
+    "{% static 'assets/img/Img2 (1).jpg' %}",
+    "{% static 'assets/img/Img2 (2).jpg' %}"
+  ];
+
+  let currentIndex = 0;
+  const heroBg = document.getElementById('heroBackground');
+  const nextHeroBg = document.getElementById('nextHeroBackground');
+
+  // Set initial background images
+  heroBg.style.backgroundImage = `url('${backgrounds[0]}')`;
+  nextHeroBg.style.backgroundImage = `url('${backgrounds[1]}')`;
+
+  function switchBackground() {
+    nextHeroBg.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+    nextHeroBg.style.opacity = 1;
+
+    setTimeout(() => {
+      heroBg.style.backgroundImage = `url('${backgrounds[currentIndex]}')`;
+      nextHeroBg.style.opacity = 0;
+    }, 1500);
+
+    currentIndex = (currentIndex + 1) % backgrounds.length;
+  }
+
+  setInterval(switchBackground, 4000);
+</script>
+
+
+<script>
+  const bgLayer = document.querySelector('.about-bg-layer');
+  const paragraphs = document.querySelectorAll('.scroll-fade');
+  const title = document.getElementById('animated-title');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    
+    // Parallax background move slower than foreground
+    if (bgLayer) {
+      bgLayer.style.transform = `translateY(${scrollY * 0.3}px)`;
+    }
+    
+    // Reveal paragraphs and title when scrolling into view
+    paragraphs.forEach(p => {
+      const rect = p.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.8) {
+        p.classList.add('visible');
+      }
+    });
+
+    const titleRect = title.getBoundingClientRect();
+    if (titleRect.top < window.innerHeight * 0.8) {
+      title.classList.add('visible');
+    }
+  });
+</script>
+<script>
+  const links = document.querySelectorAll('a');
+  
+  links.forEach(link => {
+    if (link.getAttribute('href') !== "#" && link.getAttribute('href') !== "" && link.getAttribute('target') !== "_blank") {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const overlay = document.getElementById('page-transition-overlay');
+        
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.opacity = 1;
+        
+        // Wait for animation then change page
+        setTimeout(() => {
+          window.location.href = link.href;
+        }, 800);
+      });
+    }
+  });
+  </script>
+  

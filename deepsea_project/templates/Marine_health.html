@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI - Marine Health Ecosystem Monitoring</title>
+  <meta name="description" content="Monitoring and protecting marine ecosystems using AI technology.">
+  <meta name="keywords" content="marine health, AI, ecosystem monitoring, coral bleaching, biodiversity">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+</head>
+<body class="starter-page-page">
+  
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+     
+    <nav id="navmenu" class="navmenu">
+      <ul>
+         <li><a href="{% url 'index' %}" >Home</a></li>
+          <li><a href="#solution" class="active">Solutions</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+<div class="page-title dark-background" data-aos="fade" style="background-image: url('{% static 'assets/img/p.jpg' %}');">
+  <div class="container position-relative text-center">
+    <h1>Marine Health Ecosystem Monitoring</h1>
+    <p>DeepSea.AI provides cutting-edge tools for monitoring marine biodiversity and ecosystem health.</p>
+   <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="current">Marine Heath Monitoring</li>
+          </ol>
+          </nav>
+  </div>
+    
+<div class="container-fluid" data-aos="fade-up">
+  <div class="row">
+
+    <!-- Coral Health Tool Card -->
+    <div class="col-lg-4 col-md-6">
+      <div class="tool-card text-center" data-color="red" onmousemove="moveBlurryEffect(event)">
+        <div class="blurry-circle"></div>
+        <h5 class="tool-title">Coral Reef Health Monitor</h5>
+        <p class="tool-text">Analyze coral health and detect bleaching events in real time.</p>
+        <a href="{% url 'coral_classifier' %}" class="tool-btn">Explore</a>
+      </div>
+    </div>
+
+    <!-- Algae Bloom Detection Tool Card -->
+    <div class="col-lg-4 col-md-6">
+      <div class="tool-card text-center" data-color="green" onmousemove="moveBlurryEffect(event)">
+        <div class="blurry-circle"></div>
+        <h5 class="tool-title">Algae Bloom Detection</h5>
+        <p class="tool-text">Identify and monitor harmful algal blooms using satellite imagery.</p>
+         <a href="{% url 'hab_classifier' %}" class="tool-btn">View Tool</a>
+      </div>
+    </div>
+
+    <!-- Zooplankton Classifier Tool Card -->
+    <div class="col-lg-4 col-md-6">
+      <div class="tool-card text-center" data-color="blue" onmousemove="moveBlurryEffect(event)">
+        <div class="blurry-circle"></div>
+        <h5 class="tool-title">Zooplankton Classifier</h5>
+        <p class="tool-text">Track marine biodiversity by identifying zooplankton species.</p>
+        <a href="{% url 'zoo_classifier' %}"class="tool-btn">Explore</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+    </div>
+    </div>
+</main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer bg-dark text-light text-center py-3">
+    <div class="container">
+      <p>© DeepSea.AI - All Rights Reserved</p>
+    </div>
+  </footer>
+</body>
+
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+<script>
+  AOS.init();
+</script>
+</html>
+<style>
+  /* Adjust the card size and alignment */
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.tool-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  z-index: 1;
+  max-width: 300px;
+  min-width: 250px;
+  flex: 1 1 300px;
+}
+
+@media (min-width: 768px) {
+  .tool-card {
+    max-width: 350px;
+  }
+}
+
+.tool-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #004d40;
+  margin: 0.8rem 0;
+}
+
+.tool-text {
+  font-size: 1rem;
+  color: #00695c;
+  margin-bottom: 1rem;
+}
+
+/* Button Style */
+.tool-btn {
+  background: linear-gradient(135deg, #004d40, #00796b);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.tool-btn:hover {
+  background: linear-gradient(135deg, #00796b, #004d40);
+}
+
+/* Blurry Circle Effect */
+.blurry-circle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.7;
+  filter: blur(30px);
+  transition: all 0.1s ease;
+  z-index: 0;
+}
+
+  /* Ensure the background image covers the entire viewport */
+.page-title {
+  min-height: 100vh; /* Full viewport height */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dark-background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Keeps the background fixed during scroll */
+}
+
+</style>
+<script>
+  function moveBlurryEffect(event) {
+    const card = event.currentTarget;
+    const effect = card.querySelector(".blurry-circle");
+    const rect = card.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Set the position of the blurry circle
+    effect.style.left = `${x - 60}px`;
+    effect.style.top = `${y - 60}px`;
+
+    // Set the color based on the data attribute
+    const color = card.getAttribute("data-color");
+    switch (color) {
+      case "red":
+        effect.style.background = "radial-gradient(circle, rgba(255, 111, 97, 0.5), rgba(255, 138, 128, 0.1))";
+        break;
+      case "green":
+        effect.style.background = "radial-gradient(circle, rgba(102, 187, 106, 0.5), rgba(0, 150, 136, 0.1))";
+        break;
+      case "blue":
+        effect.style.background = "radial-gradient(circle, rgba(66, 165, 245, 0.5), rgba(126, 87, 194, 0.1))";
+        break;
+      default:
+        effect.style.background = "radial-gradient(circle, rgba(150, 150, 150, 0.5), rgba(200, 200, 200, 0.1))";
+        break;
+    }
+  }
+</script>
