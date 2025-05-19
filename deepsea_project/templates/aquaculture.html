@@ -64,12 +64,12 @@
     <!-- Fish Tracking and Counting Tool Card -->
     <div class="col-lg-4 col-md-6">
       <div class="tool-card text-center" data-color="red" onmousemove="moveBlurryEffect(event)">
-        <div class="blurry-circle"></div>
-        <h5 class="tool-title">Fish Tracking and Counting</h5>
-        <p class="tool-text">Real-time tracking and counting of fish in aquaculture environments.</p>
-        <a href="#" class="tool-btn">Explore</a>
-      </div>
+      <div class="blurry-circle"></div>
+      <h5 class="tool-title">Fish Tracking and Counting</h5>
+      <p class="tool-text">Real-time tracking and counting of fish in aquaculture environments.</p>
+      <a href="{% url 'fish_counting' %}" class="tool-btn">Explore</a>
     </div>
+  </div>
 
     <!-- Fish Behavior Analysis Tool Card -->
     <div class="col-lg-4 col-md-6">
@@ -77,7 +77,7 @@
         <div class="blurry-circle"></div>
         <h5 class="tool-title">Fish Behavior Analysis</h5>
         <p class="tool-text">Monitor swimming patterns to detect stress and environmental changes.</p>
-        <a href="#" class="tool-btn">View Tool</a>
+        <a href="{% url 'fish_tracking' %}" class="tool-btn">View Tool</a>
       </div>
     </div>
 
@@ -87,22 +87,24 @@
         <div class="blurry-circle"></div>
         <h5 class="tool-title">Fish Disease Classification</h5>
         <p class="tool-text">Diagnose fish health issues using image analysis.</p>
-        <a href="#" class="tool-btn">Explore</a>
+        <a href="{% url 'fish_disease_classification' %}
+" class="tool-btn">Explore</a>
       </div>
     </div>
-
-    <!-- Intruder Detection Tool Card -->
+       <!-- Intruder Detection Tool Card -->
     <div class="col-lg-4 col-md-6">
       <div class="tool-card text-center" data-color="purple" onmousemove="moveBlurryEffect(event)">
         <div class="blurry-circle"></div>
         <h5 class="tool-title">Intruder Detection </h5>
         <p class="tool-text">Detect predators and intruders to protect aquaculture setups.</p>
-        <a href="#" class="tool-btn">Explore</a>
+        <a href="{% url 'intruder_detection' %}" class="tool-btn">Explore</a>
       </div>
     </div>
 
+   
   </div>
 </div>
+
 
 </main>
 

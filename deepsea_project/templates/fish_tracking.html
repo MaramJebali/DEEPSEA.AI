@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}#hero">Home</a></li>
+          <li><a href="#solution" class="active">Solutions</a></li>
+
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+<main class="main">
+   
+     <div class="page-title dark-background" data-aos="fade" style="background-image: url('{% static 'assets/img/how-can-i-tell-if-my-fish-are-stressed-and-what-is-likely-to-cause-fish-stress-allpondsolutions.png' %}');">
+        <div class="container position-relative text-center">
+        <h1 class="text-center">Fish Behavior Analysis</h1>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li><a href="{% url 'aqua' %}">Aquaculture</a></li>
+                    <li class="current">Fish Counting</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    {% load static %}
+<section class="section form-section">
+<section id="fish-movement-tool" class="content-section-custom section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="tool-card-custom">
+            <h4 class="tool-title-custom text-center">Upload Video for Movement Analysis</h4>
+            <p class="tool-text-custom text-center">Select a video file (MP4, AVI, etc.) to begin the fish movement analysis.</p>
+            
+            <form method="POST" enctype="multipart/form-data" action="{% url 'fish_tracking' %}" class="mb-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="video-upload-fish" class="form-label form-label-custom">Select video file (MP4, AVI, etc.):</label>
+                    <input id="video-upload-fish" type="file" name="video_fish" accept="video/*" class="form-control" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary tool-btn-custom"> {# Added tool-btn-custom for consistency if desired, kept btn-primary #}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-magic me-1" viewBox="0 0 16 16">
+                            <path d="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707L14 2.707ZM7.293 4A.5.5 0 1 0 8 3.293L6.707 2A.5.5 0 0 0 6 2.707zm-.621 2.5a.5.5 0 0 0 0 .708l.643.642a.5.5 0 0 0 .707 0L8.207 7.5l1.025 1.025a.5.5 0 0 0 .707 0l.643-.643a.5.5 0 0 0 0-.707L9.5 6.025l1.025-1.025a.5.5 0 0 0-.707-.707l-.643.643a.5.5 0 0 0 0 .708L8.475 7.5 7.45 6.475a.5.5 0 0 0-.707 0"/>
+                            <path d="M1.828 7.928a4 4 0 0 1 5.656 0l.708.707a.5.5 0 0 0 .707-.707L8.207 7.22a5 5 0 0 0-7.07 0l-.708.708a.5.5 0 0 0 .707.707zm10.344 0a4 4 0 0 0-5.656 0l-.708-.707a.5.5 0 0 1-.707.707l.707.708a5 5 0 0 1 7.07 0l.708-.707a.5.5 0 0 1-.707-.707L12.172 7.928Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+         
+            {% if task_id %}
+            <div id="processing-container-fish" class="mt-4">
+                <h5>Video Processing <span id="task-id-display-fish" class="text-muted small">(Task ID: {{ task_id }})</span></h5>
+                <div class="progress">
+                    <div id="progress-bar-fish" class="progress-bar progress-bar-striped progress-bar-animated"
+                         role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <div id="status-text-fish" class="mt-2 text-muted">Initializing...</div>
+                <div id="error-message-fish" class="alert alert-danger mt-2" style="display: none;"></div>
+            </div>
+            {% elif error_message %}
+                <div class="alert alert-danger mt-3"><strong>Error:</strong> {{ error_message }}</div>
+            {% endif %}
+            {# --- END OF ORIGINAL PROCESSING DISPLAY --- #}
+        </div>
+
+
+        {% if task_id %}
+        <div id="video-result-fish" class="mt-4 video-results-card" style="display: none;">
+            <h3 class="text-center tool-title-custom mb-4">Analysis Results</h3> {# Styled title #}
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0"> {# Added spacing for mobile #}
+                    <h4 class="text-center h5">Original Video</h4>
+                    {% if original_video_url %}
+                    <div class="video-container">
+                        <video id="original-video-fish" controls muted preload="metadata" style="width: 100%;">
+                            <source src="{{ original_video_url }}" type="{{ original_video_type }}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center">Original video not available.</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-center h5">Analyzed Video (Tracked Fish)</h4> {# English text #}
+                    <div class="video-container">
+                        <video id="processed-video-fish" controls muted preload="metadata" style="width: 100%;">
+                            <!-- Source will be added by JavaScript -->
+                        </video>
+                    </div>
+                    <div id="error-message-fish-video" class="alert alert-warning mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {# --- END OF ORIGINAL VIDEO RESULT DISPLAY --- #}
+
+      </div>
+    </section>
+
+
+</main>
+
+
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <strong class="px-1 sitename">DeepSea.AI</strong> All Rights Reserved</p>
+      <div class="credits">
+        Designed by <a href="https://maramjebali7111.wixsite.com/samsan/">Samsan</a> Distributed by <a href="https://themewagon.com">SAMSAN</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+ 
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+
+</html>
+  {# --- THIS SCRIPT IS EXACTLY FROM YOUR ORIGINAL WORKING fish_tracking.html --- #}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const progressBarFish = document.getElementById('progress-bar-fish');
+        const statusTextFish = document.getElementById('status-text-fish');
+        const videoResultDivFish = document.getElementById('video-result-fish');
+        const processedVideoElFish = document.getElementById('processed-video-fish');
+        const errorMessageDivFish = document.getElementById('error-message-fish');
+        const errorMessageFishVideoDiv = document.getElementById('error-message-fish-video');
+
+        const taskIdFish = "{{ task_id|escapejs }}";
+
+        if (taskIdFish && progressBarFish) {
+            function checkFishStatus() {
+                // This fetch URL must match your urls.py for the fish movement status check
+                fetch(`/outcomes/check_fish_processing_status/${taskIdFish}/`) 
+                    .then(response => {
+                        if (!response.ok) {
+                            // Try to get error text from server if available
+                            return response.text().then(text => { throw new Error(`HTTP Error ${response.status}: ${text || response.statusText}`) });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        errorMessageDivFish.style.display = 'none';
+                        errorMessageDivFish.textContent = '';
+                        errorMessageFishVideoDiv.style.display = 'none';
+                        errorMessageFishVideoDiv.textContent = '';
+
+                        let currentProgress = parseInt(data.progress) || 0;
+                        progressBarFish.style.width = currentProgress + '%';
+                        progressBarFish.textContent = currentProgress + '%';
+                        progressBarFish.setAttribute('aria-valuenow', currentProgress);
+
+                        if (data.status === 'processing' || data.status === 'initializing') {
+                            statusTextFish.textContent = data.status === 'initializing' ? 'Initializing analysis...' : `Analyzing: ${currentProgress}%`; // English
+                            if (!progressBarFish.classList.contains('progress-bar-animated')) {
+                                 progressBarFish.classList.add('progress-bar-animated', 'progress-bar-striped');
+                                 progressBarFish.classList.remove('bg-success', 'bg-danger');
+                                 // Keep Bootstrap default progress bar color or use your theme's primary
+                            }
+                            setTimeout(checkFishStatus, 1800);
+
+                        } else if (data.status === 'not_found' && currentProgress === 0) {
+                            statusTextFish.textContent = 'Waiting for server to initialize task...'; // English
+                            setTimeout(checkFishStatus, 2200);
+
+                        } else if (data.status === 'completed') {
+                            progressBarFish.style.width = '100%';
+                            progressBarFish.textContent = '100%';
+                            progressBarFish.classList.remove('progress-bar-animated', 'progress-bar-striped');
+                            // progressBarFish.classList.add('bg-success'); // Or your theme's success color
+                            statusTextFish.innerHTML = '<strong>Analysis complete!</strong>'; // English
+                            
+                            if (data.video_url && processedVideoElFish) {
+                                const sourceElement = document.createElement('source');
+                                sourceElement.setAttribute('src', data.video_url);
+                                let videoType = data.video_type;
+                                if (!videoType && data.video_url) { // Fallback for video type
+                                    if (data.video_url.toLowerCase().endsWith('.mp4')) videoType = 'video/mp4';
+                                    else if (data.video_url.toLowerCase().endsWith('.avi')) videoType = 'video/x-msvideo';
+                                    else videoType = 'video/mp4'; 
+                                }
+                                sourceElement.setAttribute('type', videoType);
+                                processedVideoElFish.innerHTML = ''; 
+                                processedVideoElFish.appendChild(sourceElement);
+                                processedVideoElFish.load(); 
+                                videoResultDivFish.style.display = 'block';
+                                
+                                processedVideoElFish.onerror = function() { // Your original error handling
+                                    let errorMsg = "Unknown error loading video.";
+                                    if (processedVideoElFish.error) {
+                                        switch (processedVideoElFish.error.code) {
+                                            case MediaError.MEDIA_ERR_ABORTED: errorMsg = "Video loading aborted by user."; break;
+                                            case MediaError.MEDIA_ERR_NETWORK: errorMsg = "Network error during video loading."; break;
+                                            case MediaError.MEDIA_ERR_DECODE: errorMsg = "Video decoding error. Format might be corrupt or unsupported."; break;
+                                            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED: errorMsg = "Video format not supported or source not found."; break;
+                                            default: errorMsg = `Unexpected video error (code ${processedVideoElFish.error.code}).`;
+                                        }
+                                    }
+                                    console.error("PROCESSED VIDEO ERROR:", errorMsg, "URL:", data.video_url);
+                                    errorMessageFishVideoDiv.textContent = errorMsg + " URL: " + data.video_url;
+                                    errorMessageFishVideoDiv.style.display = 'block';
+                                };
+                            } else {
+                                statusTextFish.textContent = 'Processing complete, but processed video URL is missing.'; // English
+                                errorMessageDivFish.textContent = 'URL for the processed video was not provided by the server.'; // English
+                                errorMessageDivFish.style.display = 'block';
+                            }
+                        } else if (data.status === 'error') {
+                            progressBarFish.classList.remove('progress-bar-animated', 'progress-bar-striped');
+                            progressBarFish.classList.add('bg-danger'); // Error color
+                            statusTextFish.innerHTML = `<strong>Error:</strong> ${data.error || 'Unknown processing error.'}`; // English
+                            errorMessageDivFish.textContent = data.error || 'An error occurred during processing.'; // English
+                            errorMessageDivFish.style.display = 'block';
+                            console.error('Server processing error (fish movement):', data.error);
+                        } else {
+                            statusTextFish.textContent = `Unknown status: ${data.status}. Retrying...`; // English
+                            setTimeout(checkFishStatus, 3000);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch Error for fish movement status:', error);
+                        statusTextFish.textContent = 'Error communicating with server.'; // English
+                        errorMessageDivFish.textContent = 'Could not retrieve processing status. Details: ' + error.message;
+                        errorMessageDivFish.style.display = 'block';
+                        progressBarFish.classList.add('bg-danger');
+                    });
+            }
+            setTimeout(checkFishStatus, 700); // Initial delay
+        }
+    });
+  </script>
+  {# --- END OF ORIGINAL SCRIPT --- #}
+
+</body>
+</html>
+
+
+
+ <!-- Custom Styles for this page (consistent with other styled pages) -->
+  <style>
+    body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; }
+    .video-container video { max-width: 100%; height: auto; border: 1px solid #dee2e6; background-color: #000; border-radius: 0.25rem; }
+    .progress { margin-top: 10px; height: 25px; }
+    .progress-bar { font-size: 0.9rem; }
+    #error-message-fish-video { margin-top: 10px; }
+
+    .tool-card-custom {
+      background: #ffffff; border: 1px solid #e0e0e0; border-radius: 0.5rem;
+      padding: 1.5rem; margin-bottom: 1.5rem; transition: all 0.3s ease-in-out;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+    .tool-card-custom:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+    .tool-title-custom {
+      font-size: 1.5rem; font-weight: 700; color: #004d40;
+      margin-top: 0; margin-bottom: 0.75rem;
+    }
+    .tool-text-custom {
+      font-size: 1rem; color: #333; margin-bottom: 1.25rem; line-height: 1.6;
+    }
+    .tool-btn-custom { /* Default button style for consistency */
+      background: linear-gradient(135deg, #004d40, #00796b); color: #fff;
+      border-radius: 0.3rem; padding: 0.6rem 1.5rem; text-decoration: none;
+      font-weight: bold; transition: background 0.3s ease, transform 0.2s ease;
+      display: inline-block; border: none;
+    }
+     /* Using Bootstrap's btn-primary for this specific button as in your original */
+    .btn-primary.tool-btn-custom {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    }
+    .btn-primary.tool-btn-custom:hover {
+        background: linear-gradient(155deg, #0a58ca, #0d6efd);
+    }
+    .tool-btn-custom:hover { transform: translateY(-2px); } /* General hover */
+
+    .form-label-custom { font-weight: 500; color: #333; }
+    .content-section-custom { padding-top: 20px; padding-bottom: 40px; }
+     .video-results-card {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+  </style>

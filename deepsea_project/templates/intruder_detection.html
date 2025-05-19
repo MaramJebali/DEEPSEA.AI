@@ -1,0 +1,424 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}#hero">Home</a></li>
+          <li><a href="#solution" class="active">Solutions</a></li>
+
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+<main class="main"> 
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url('{% static 'assets/img/seagull.png' %}');">
+        <div class="container position-relative">
+            <h1 class="text-center">{{ page_title|default:"Seagull Intruder Detection System" }}</h1>
+            <p class="text-center">Choose your detection mode or analyze an existing video for seagull presence.</p>
+            <nav class="breadcrumbs text-center">
+                <ol>
+                    <li><a href="{% url 'index' %}#solution">Solutions</a></li>
+                    <li class="current">Seagull Detection</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    {% load static %}
+<section class="section form-section">
+
+    <section id="seagull-detection-tool" class="content-section-custom section-bg">
+      <div class="container" data-aos="fade-up">
+        
+        <ul class="nav nav-pills nav-fill mb-4 mode-selector" id="modeTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {% if mode == 'camera' or not mode %}active{% endif %}" id="camera-tab"
+                   href="{% url 'intruder_detection' %}?mode=camera">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill me-2" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2z"/>
+                  </svg>Real-Time Detection
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {% if mode == 'upload' %}active{% endif %}" id="upload-tab"
+                   href="{% url 'intruder_detection' %}?mode=upload">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload me-2" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                  </svg>Video Analysis
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="modeTabContent">
+            <div class="tab-pane fade {% if mode == 'camera' or not mode %}show active{% endif %}" id="camera-mode-content" role="tabpanel" aria-labelledby="camera-tab">
+                <div class="tool-card-custom">
+                    <h4 class="tool-title-custom text-center">Real-Time Mode</h4>
+                    <p class="tool-text-custom text-center">Use your camera for live seagull detection.</p>
+                    <div class="camera-controls text-center mb-3">
+                        <button id="start-camera" class="tool-btn-custom btn-success btn-lg me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill me-1" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
+                              </svg>Start Camera
+                        </button>
+                        <button id="stop-camera" class="tool-btn-custom btn-danger btn-lg" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stop-circle-fill me-1" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5z"/>
+                              </svg>Stop Camera
+                        </button>
+                    </div>
+                    <div class="video-container text-center">
+                         <img id="camera-feed-img" src="#" alt="Live camera feed" style="display: none; width: 100%; max-width: 640px;" />
+                         <div id="camera-placeholder">
+                            <span>Camera feed will appear here once "Start Camera" is clicked.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade {% if mode == 'upload' %}show active{% endif %}" id="upload-mode-content" role="tabpanel" aria-labelledby="upload-tab">
+                <div class="tool-card-custom">
+                    <h4 class="tool-title-custom text-center">Video Analysis Mode</h4>
+                    <p class="tool-text-custom text-center">Upload a video file (MP4, AVI, etc.) for the system to analyze.</p>
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'intruder_detection' %}?mode=upload" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="video-upload" class="form-label form-label-custom">Select video file:</label>
+                            <input id="video-upload" type="file" name="video" accept="video/*" class="form-control" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="tool-btn-custom btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                  </svg>Start Analysis
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if task_id %}
+                    <div id="processing-container" class="mt-4">
+                        <h5>Video Processing <span id="task-id-display" class="text-muted small">(Task ID: {{ task_id }})</span></h5>
+                        <div class="progress">
+                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <div id="status-text" class="mt-2 text-muted">Initializing...</div>
+                        <div id="error-message" class="alert alert-danger mt-2" style="display: none;"></div>
+                    </div>
+                    <div id="video-result" class="mt-4 video-results-card" style="display: none;">
+                        <h3 class="text-center tool-title-custom mb-4">Analysis Results</h3>
+                        <div id="detection-result-summary" class="mt-2 mb-3"></div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mb-md-0" id="original-video-container">
+                                <h4 class="text-center h5">Original Video</h4>
+                                {% if original_video_url %}
+                                <div class="video-container">
+                                <video id="original-video" controls muted preload="metadata" style="width: 100%;">
+                                    <source src="{{ original_video_url }}" type="{{ original_video_type }}">
+                                    Your browser does not support the video tag.
+                                </video>
+                                </div>
+                                {% else %}
+                                <p class="text-muted text-center">Original video not available for display.</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6" id="processed-video-container">
+                                <h4 class="text-center h5">Processed Video</h4>
+                                <div class="video-container">
+                                <video id="processed-video" controls muted preload="metadata" style="width: 100%;">
+                                </video>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif error_message %}
+                        <div class="alert alert-danger mt-3">
+                            <strong>Error:</strong> {{ error_message }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+</main>
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <strong class="px-1 sitename">DeepSea.AI</strong> All Rights Reserved</p>
+      <div class="credits">
+        Designed by <a href="https://maramjebali7111.wixsite.com/samsan/">Samsan</a> Distributed by <a href="https://themewagon.com">SAMSAN</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+ 
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+
+</html>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+   
+        var activeTabLink = document.querySelector('#modeTabs a.active');
+        if (activeTabLink) {
+          
+        }
+
+
+        // --- Real-Time Camera Mode (Keep your existing logic) ---
+        const startCameraBtn = document.getElementById('start-camera');
+        const stopCameraBtn = document.getElementById('stop-camera');
+        const cameraFeedImg = document.getElementById('camera-feed-img');
+        const cameraPlaceholder = document.getElementById('camera-placeholder');
+        const csrfTokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+        const csrfToken = csrfTokenInput ? csrfTokenInput.value : '';
+
+        if (startCameraBtn) {
+            startCameraBtn.addEventListener('click', function() {
+                fetch(`/outcomes/start_camera/`, { 
+                    method: 'POST', headers: { 'X-CSRFToken': csrfToken }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'starting' || data.status === 'already_started' || data.status === 'started') {
+                        cameraFeedImg.src = `/outcomes/camera_feed/?t=` + new Date().getTime(); // Added cache buster
+                        cameraFeedImg.style.display = 'block';
+                        cameraPlaceholder.style.display = 'none';
+                        startCameraBtn.disabled = true; stopCameraBtn.disabled = false;
+                        console.log("Camera stream started/requested.");
+                    } else {
+                        alert("Could not start camera: " + (data.message || data.status));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error starting camera:", error);
+                    alert("Communication error starting camera. Check console.");
+                    cameraPlaceholder.innerHTML = "<span>Error starting camera. Check permissions and console.</span>";
+                    cameraPlaceholder.style.display = 'flex'; cameraFeedImg.style.display = 'none';
+                });
+            });
+
+            stopCameraBtn.addEventListener('click', function() {
+                fetch(`/outcomes/stop_camera/`, { 
+                    method: 'POST', headers: { 'X-CSRFToken': csrfToken }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'stopped' || data.status === 'already_stopped') {
+                        cameraFeedImg.src = "#"; cameraFeedImg.style.display = 'none';
+                        cameraPlaceholder.style.display = 'flex';
+                        cameraPlaceholder.innerHTML = "<span>Camera feed will appear here after clicking \"Start Camera\".</span>";
+                        startCameraBtn.disabled = false; stopCameraBtn.disabled = true;
+                        console.log("Camera stream stopped.");
+                    }
+                })
+                .catch(error => {
+                     console.error("Error stopping camera:", error);
+                     alert("Communication error stopping camera. Check console.");
+                });
+            });
+        }
+
+        // --- Video Upload Processing Mode (Keep your existing logic) ---
+        const progressBar = document.getElementById('progress-bar');
+        const statusText = document.getElementById('status-text');
+        const videoResultDiv = document.getElementById('video-result');
+        const processedVideoEl = document.getElementById('processed-video');
+        const errorMessageDiv = document.getElementById('error-message');
+        const detectionSummaryDiv = document.getElementById('detection-result-summary');
+        const taskId = "{{ task_id|escapejs }}";
+
+        if (taskId && progressBar) {
+            function checkStatus() {
+                fetch(`/outcomes/check_processing_status/${taskId}/`) 
+                    .then(response => {
+                        if (!response.ok) { throw new Error(`HTTP Error! Status: ${response.status}`); }
+                        return response.json();
+                    })
+                    .then(data => {
+                        errorMessageDiv.style.display = 'none'; errorMessageDiv.textContent = '';
+                        let currentProgress = parseInt(data.progress) || 0;
+                        progressBar.style.width = currentProgress + '%';
+                        progressBar.textContent = currentProgress + '%';
+                        progressBar.setAttribute('aria-valuenow', currentProgress);
+
+                        if (data.status === 'processing' || data.status === 'initializing') {
+                            statusText.textContent = data.status === 'initializing' ? 'Initializing processing...' : `Processing video: ${currentProgress}%`;
+                            if (!progressBar.classList.contains('progress-bar-animated')) {
+                                 progressBar.classList.add('progress-bar-animated', 'progress-bar-striped');
+                                 progressBar.classList.remove('bg-success', 'bg-danger');
+                            }
+                            setTimeout(checkStatus, 1500);
+                        } else if (data.status === 'completed') {
+                            progressBar.style.width = '100%'; progressBar.textContent = '100%';
+                            progressBar.classList.remove('progress-bar-animated', 'progress-bar-striped');
+                            progressBar.classList.add('bg-success');
+                            statusText.innerHTML = '<strong>Processing complete!</strong>';
+                            if (data.video_url && processedVideoEl) {
+                                const sourceElement = document.createElement('source');
+                                sourceElement.src = data.video_url;
+                                sourceElement.type = data.video_type || (data.video_url.toLowerCase().endsWith('.avi') ? 'video/x-msvideo' : 'video/mp4');
+                                processedVideoEl.innerHTML = ''; processedVideoEl.appendChild(sourceElement);
+                                processedVideoEl.load(); videoResultDiv.style.display = 'block';
+                                if (data.detected_in_video) {
+                                    detectionSummaryDiv.innerHTML = '<div class="alert alert-danger"><strong>Alert:</strong> Seagull(s) detected in video!</div>';
+                                } else {
+                                    detectionSummaryDiv.innerHTML = '<div class="alert alert-success">No seagulls detected in video.</div>';
+                                }
+                            } else { 
+                                errorMessageDiv.textContent = 'Processing complete, but the result video is unavailable.';
+                                errorMessageDiv.style.display = 'block';
+                             }
+                        } else if (data.status === 'error') { 
+                            progressBar.classList.remove('progress-bar-animated','progress-bar-striped','bg-success');
+                            progressBar.classList.add('bg-danger');
+                            statusText.innerHTML = `<strong>Error:</strong> ${data.error || 'Unknown error.'}`;
+                            errorMessageDiv.textContent = `Server error: ${data.error || 'An unknown error occurred.'}`;
+                            errorMessageDiv.style.display = 'block';
+                        } else if (data.status === 'not_found') { 
+                            statusText.textContent = 'Task not found, retrying...'; setTimeout(checkStatus, 2500);
+                        } else { 
+                            statusText.textContent = `Unknown status: ${data.status}. Retrying...`; setTimeout(checkStatus, 2500);
+                        }
+                    })
+                    .catch(error => { 
+                        statusText.textContent = 'Error communicating with server.';
+                        errorMessageDiv.textContent = 'Communication error: ' + error.message;
+                        errorMessageDiv.style.display = 'block';
+                        progressBar.classList.add('bg-danger');
+                    });
+            }
+            setTimeout(checkStatus, 500);
+        }
+    });
+  </script>
+
+</body>
+</html>
+
+
+ <!-- Custom Styles for this page -->
+  <style>
+    body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; }
+    .video-container video, .video-container img { max-width: 100%; height: auto; border: 1px solid #dee2e6; background-color: #000; border-radius: 0.25rem;}
+    .progress { margin-top: 10px; height: 25px; }
+    .progress-bar { font-size: 0.9rem; }
+    
+    .mode-selector { margin-bottom: 20px; }
+    .camera-controls { margin: 20px 0; }
+    .alert { margin-top: 20px; }
+    .nav-pills .nav-link { color: #004d40; } 
+    .nav-pills .nav-link.active { background-color: #004d40; color: white; }
+    #camera-placeholder {
+        width: 100%; max-width: 640px; min-height: 480px; border: 1px dashed #ccc;
+        display: flex; align-items: center; justify-content: center;
+        background-color: #e9ecef; color: #6c757d; font-style: italic; margin: 0 auto;
+        border-radius: 0.25rem;
+    }
+    #camera-feed-img { display: block; margin: 0 auto; border-radius: 0.25rem;}
+    #original-video-container, #processed-video-container { margin-bottom: 15px; }
+    .tab-pane { padding-top: 15px; }
+
+    .tool-card-custom {
+      background: #ffffff; border: 1px solid #e0e0e0; border-radius: 0.5rem;
+      padding: 1.5rem; margin-bottom: 1.5rem; transition: all 0.3s ease-in-out;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+    .tool-card-custom:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+    .tool-title-custom {
+      font-size: 1.5rem; font-weight: 700; color: #004d40;
+      margin-top: 0; margin-bottom: 0.75rem;
+    }
+    .tool-text-custom {
+      font-size: 1rem; color: #333; margin-bottom: 1.25rem; line-height: 1.6;
+    }
+    .tool-btn-custom {
+      background: linear-gradient(135deg, #004d40, #00796b); color: #fff;
+      border-radius: 0.3rem; padding: 0.6rem 1.5rem; text-decoration: none;
+      font-weight: bold; transition: background 0.3s ease, transform 0.2s ease;
+      display: inline-block; border: none;
+    }
+    .tool-btn-custom:hover { background: linear-gradient(155deg, #00796b, #004d40); transform: translateY(-2px); }
+    .tool-btn-custom.btn-success { background: linear-gradient(135deg, #198754, #157347); }
+    .tool-btn-custom.btn-success:hover { background: linear-gradient(155deg, #157347, #198754); }
+    .tool-btn-custom.btn-danger { background: linear-gradient(135deg, #dc3545, #b02a37); }
+    .tool-btn-custom.btn-danger:hover { background: linear-gradient(155deg, #b02a37, #dc3545); }
+    .tool-btn-custom.btn-primary { background: linear-gradient(135deg, #0d6efd, #0a58ca); }
+    .tool-btn-custom.btn-primary:hover { background: linear-gradient(155deg, #0a58ca, #0d6efd); }
+    .form-label-custom { font-weight: 500; color: #333; }
+    .content-section-custom { padding-top: 20px; padding-bottom: 40px; }
+     .video-results-card {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+  </style>

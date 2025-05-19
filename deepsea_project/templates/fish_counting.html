@@ -1,0 +1,391 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>DeepSea.AI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+  <!-- Page Transition Overlay -->
+  <div id="page-transition-overlay"></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="logo-img me-2">
+
+        <h1 class="sitename">DeepSea.AI</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'index' %}#hero">Home</a></li>
+          <li><a href="#solution" class="active">Solutions</a></li>
+
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+<main class="main">
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url('{% static 'assets/img/bassin.png' %}');"> {# Replace with a suitable banner image #}
+        <div class="container position-relative text-center">
+        <h1 class="text-center">Fish Traking and Counting Analysis</h1>
+            <p class="text-center">Upload a video to detect, track, and count fish in aquatic environments.</p>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li><a href="{% url 'aqua' %}">Aquaculture</a></li>
+                    <li class="current">Fish Counting</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    {% load static %}
+<section class="section form-section">
+    <!-- Fish Counting Section -->
+    <section id="fish-counting-tool" class="content-section-custom section-bg"> {# Use section-bg for light background if needed #}
+      <div class="container" data-aos="fade-up">
+
+        <div class="tool-card-custom"> {# Single card for upload and initial status #}
+            <h4 class="tool-title-custom text-center">Upload Video for Counting</h4>
+            <p class="tool-text-custom text-center">Select a video file (MP4, AVI, etc.) to begin the fish counting process.</p>
+            
+            <form method="POST" enctype="multipart/form-data" action="{% url 'fish_counting' %}" class="mb-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="videoUploadInputCounting" class="form-label form-label-custom">Select video file:</label>
+                    <input id="videoUploadInputCounting" type="file" name="video_upload_for_counting" accept="video/*" class="form-control" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="tool-btn-custom">
+                        <i class="bi bi-play-circle-fill me-2"></i>Start Counting
+                    </button>
+                </div>
+            </form>
+
+            {% if task_id %}
+            <div id="processing-container-fish-counting" class="mt-4">
+                <h5>Video Processing <span id="task-id-display-fish-counting" class="text-muted small">(Task ID: {{ task_id }})</span></h5>
+                <div class="progress">
+                    <div id="progress-bar-fish-counting" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                         role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <div id="status-text-fish-counting" class="mt-2 text-muted">Initializing...</div>
+                <div id="stats-display-fish-counting" class="stats-display mt-3" style="display: none;">
+                    <h6>Live Statistics:</h6>
+                    <ul class="list-unstyled">
+                        <li>Current Fish in Frame: <span id="current-fish-count">0</span></li>
+                        <li>Total Unique Fish: <span id="total-unique-count">0</span></li>
+                        <li>Entries: <span id="entries-count">0</span></li>
+                        <li>Exits: <span id="exits-count">0</span></li>
+                        <li>Processing FPS: <span id="fps-count-display">0.0</span></li>
+                    </ul>
+                </div>
+                <div id="error-message-fish-counting" class="alert alert-danger mt-2" style="display: none;"></div>
+            </div>
+            {% elif error_message %}
+                <div class="alert alert-danger mt-3"><strong>Error:</strong> {{ error_message }}</div>
+            {% endif %}
+        </div>
+
+
+        {% if task_id %} {# Only show video results area if a task has been submitted #}
+        <div id="video-result-fish-counting" class="mt-4 video-results-card" style="display: none;">
+            <h3 class="text-center tool-title-custom mb-4">Analysis Results</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h4 class="text-center h5">Original Video</h4>
+                    {% if original_video_url %}
+                    <div class="video-container">
+                        <video id="original-video-fish-counting" controls muted preload="metadata" style="width: 100%; border-radius: 0.25rem;">
+                            <source src="{{ original_video_url }}" type="{{ original_video_type }}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center">Original video not available.</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h4 class="text-center h5">Processed Video (with Counting)</h4>
+                    <div class="video-container">
+                        <video id="processed-video-fish-counting" controls muted preload="metadata" style="width: 100%; border-radius: 0.25rem;"></video>
+                    </div>
+                    <div id="error-message-fish-counting-video" class="alert alert-warning mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+      </div>
+    </section><!-- End Fish Counting Section -->
+
+</main>
+
+
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>© <strong class="px-1 sitename">DeepSea.AI</strong> All Rights Reserved</p>
+      <div class="credits">
+        Designed by <a href="https://maramjebali7111.wixsite.com/samsan/">Samsan</a> Distributed by <a href="https://themewagon.com">SAMSAN</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
+
+ 
+
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script>
+    AOS.init();
+  </script>
+</body>
+
+</html>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const progressBar = document.getElementById('progress-bar-fish-counting');
+        const statusText = document.getElementById('status-text-fish-counting');
+        const videoResultDiv = document.getElementById('video-result-fish-counting');
+        const processedVideoEl = document.getElementById('processed-video-fish-counting');
+        const errorMessageDiv = document.getElementById('error-message-fish-counting');
+        const errorVideoMessageDiv = document.getElementById('error-message-fish-counting-video');
+
+        const statsDisplayDiv = document.getElementById('stats-display-fish-counting');
+        const currentFishSpan = document.getElementById('current-fish-count');
+        const totalUniqueSpan = document.getElementById('total-unique-count');
+        const entriesSpan = document.getElementById('entries-count');
+        const exitsSpan = document.getElementById('exits-count');
+        const fpsSpan = document.getElementById('fps-count-display');
+
+        const taskId = "{{ task_id|escapejs }}";
+
+        if (taskId && progressBar) {
+            function checkCountingStatus() {
+                // Ensure this URL matches your outcomes/urls.py for checking status
+                fetch(`/outcomes/check_fish_counting_status/${taskId}/`) 
+                    .then(response => {
+                        if (!response.ok) {
+                            // Try to get error text from server if available
+                            return response.text().then(text => { throw new Error(`HTTP Error ${response.status}: ${text || response.statusText}`) });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        errorMessageDiv.style.display = 'none'; errorVideoMessageDiv.style.display = 'none';
+                        let currentProgress = parseInt(data.progress) || 0;
+                        progressBar.style.width = currentProgress + '%';
+                        progressBar.textContent = currentProgress + '%';
+                        progressBar.setAttribute('aria-valuenow', currentProgress);
+
+
+                        if (data.stats && statsDisplayDiv) {
+                            statsDisplayDiv.style.display = 'block';
+                            currentFishSpan.textContent = data.stats.current_fish !== undefined ? data.stats.current_fish : 'N/A';
+                            totalUniqueSpan.textContent = data.stats.total_unique !== undefined ? data.stats.total_unique : 'N/A';
+                            entriesSpan.textContent = data.stats.entries !== undefined ? data.stats.entries : 'N/A';
+                            exitsSpan.textContent = data.stats.exits !== undefined ? data.stats.exits : 'N/A';
+                            fpsSpan.textContent = data.stats.fps || "0.0";
+                        }
+
+                        if (data.status === 'processing' || data.status === 'initializing') {
+                            statusText.textContent = data.status === 'initializing' ? 'Initializing...' : `Processing: ${currentProgress}%`;
+                            if (!progressBar.classList.contains('progress-bar-animated')) {
+                                 progressBar.classList.add('progress-bar-animated','progress-bar-striped');
+                                 progressBar.classList.remove('bg-danger'); // Ensure it's not stuck on danger
+                                 progressBar.classList.add('bg-success'); 
+                            }
+                            setTimeout(checkCountingStatus, 2000); // Polling interval
+                        } else if (data.status === 'completed') {
+                            progressBar.style.width = '100%'; progressBar.textContent = '100%';
+                            progressBar.classList.remove('progress-bar-animated','progress-bar-striped');
+                            progressBar.classList.add('bg-success');
+                            statusText.innerHTML = '<strong>Processing Complete!</strong>';
+                            
+                            if (data.video_url && processedVideoEl) {
+                                const source = document.createElement('source');
+                                source.src = data.video_url;
+                                source.type = data.video_type || (data.video_url.toLowerCase().endsWith('.avi') ? 'video/x-msvideo' : 'video/mp4');
+                                processedVideoEl.innerHTML = ''; 
+                                processedVideoEl.appendChild(source);
+                                processedVideoEl.load(); 
+                                videoResultDiv.style.display = 'block';
+                                processedVideoEl.onerror = function() {
+                                    let errorMsg = "Error loading processed video.";
+                                    if (processedVideoEl.error) {
+                                        switch (processedVideoEl.error.code) {
+                                            case MediaError.MEDIA_ERR_ABORTED: errorMsg = "Video load aborted."; break;
+                                            case MediaError.MEDIA_ERR_NETWORK: errorMsg = "Network error during video load."; break;
+                                            case MediaError.MEDIA_ERR_DECODE: errorMsg = "Video decoding error. Format might be unsupported or corrupt."; break;
+                                            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED: errorMsg = "Video format not supported or source not found."; break;
+                                            default: errorMsg = `Unexpected video error (code ${processedVideoEl.error.code}).`;
+                                        }
+                                    }
+                                    console.error("PROCESSED VIDEO ERROR:", errorMsg, "URL:", data.video_url);
+                                    errorVideoMessageDiv.textContent = errorMsg + " URL: " + data.video_url;
+                                    errorVideoMessageDiv.style.display = 'block';
+                                };
+                            } else {
+                                errorMessageDiv.textContent = 'Processing complete, but the processed video URL is missing.';
+                                errorMessageDiv.style.display = 'block';
+                            }
+                        } else if (data.status === 'error') {
+                            progressBar.style.width = (currentProgress > 0 && currentProgress < 100 ? currentProgress : 100) + '%'; // Show full error bar
+                            progressBar.classList.remove('progress-bar-animated','progress-bar-striped','bg-success');
+                            progressBar.classList.add('bg-danger');
+                            statusText.innerHTML = `<strong>Error:</strong> ${data.error || 'An unknown error occurred.'}`;
+                            errorMessageDiv.textContent = data.error || 'An error occurred during processing.';
+                            errorMessageDiv.style.display = 'block';
+                            console.error('Server processing error:', data.error);
+                        } else if (data.status === 'not_found') {
+                            statusText.textContent = 'Task ID not found. Retrying...';
+                            // This might happen if the page is reloaded or status check is too fast
+                            setTimeout(checkCountingStatus, 3000); 
+                        } else {
+                            statusText.textContent = `Unknown status: ${data.status}. Progress: ${currentProgress}%`;
+                            setTimeout(checkCountingStatus, 3000);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch Error for status check:', error);
+                        statusText.textContent = 'Error communicating with server to get status.';
+                        errorMessageDiv.textContent = 'Could not retrieve processing status. Please check your network or try again. Details: ' + error.message;
+                        errorMessageDiv.style.display = 'block';
+                        progressBar.classList.remove('bg-success');
+                        progressBar.classList.add('bg-danger');
+                        // Optionally stop polling on persistent fetch errors
+                    });
+            }
+            setTimeout(checkCountingStatus, 700); // Initial call with a small delay
+        }
+    });
+  </script>
+
+
+ <style>
+    body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; } /* Consistent font */
+    .video-container video { max-width: 100%; height: auto; border: 1px solid #dee2e6; background-color: #000; }
+    .progress { margin-top: 10px; height: 25px; }
+    .progress-bar { font-size: 0.9rem; }
+    #error-message-fish-counting-video { margin-top: 10px; }
+    .stats-display { margin-top: 15px; padding: 10px; background-color: #e9ecef; border-radius: .25rem;}
+
+    /* Tool Card Styling (from your Zooplankton page for consistency) */
+    .tool-card-custom { /* Renamed to avoid conflict if original .tool-card has different use */
+      background: #ffffff;
+      border: 1px solid #e0e0e0; /* Slightly thinner border */
+      border-radius: 0.5rem;
+      padding: 1.5rem; /* Increased padding */
+      margin-bottom: 1.5rem; /* Consistent margin */
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07); /* Softer shadow */
+    }
+
+    .tool-card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .tool-title-custom { /* Renamed */
+      font-size: 1.5rem; /* Adjusted size */
+      font-weight: 700; /* Bolder */
+      color: #004d40; /* Dark teal */
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-text-custom { /* Renamed */
+      font-size: 1rem;
+      color: #333; /* Darker gray for better readability */
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .tool-btn-custom { /* Renamed */
+      background: linear-gradient(135deg, #004d40, #00796b);
+      color: #fff;
+      border-radius: 0.3rem; /* Slightly less rounded */
+      padding: 0.6rem 1.5rem; /* Adjusted padding */
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s ease;
+      display: inline-block; /* For proper padding */
+      border: none; /* Remove default button border */
+    }
+
+    .tool-btn-custom:hover {
+      background: linear-gradient(155deg, #00796b, #004d40);
+      transform: translateY(-2px);
+    }
+
+    .form-label-custom { /* Renamed */
+        font-weight: 500;
+        color: #333;
+    }
+
+    /* Style for the section containing the cards */
+    .content-section-custom {
+        padding-top: 20px;
+        padding-bottom: 40px;
+    }
+
+    /* Ensure cards in a row have some space */
+    .row > .col-md-6 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .video-results-card {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+
+  </style>
